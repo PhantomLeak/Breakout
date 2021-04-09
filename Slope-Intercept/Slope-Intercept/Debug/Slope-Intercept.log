@@ -1,0 +1,7 @@
+﻿  slopeintercept.cpp
+C:\Users\Dstoc\source\repos\Slope-Intercept\Slope-Intercept\slopeintercept.cpp(48,4): warning C4551: function call missing argument list
+C:\Users\Dstoc\source\repos\Slope-Intercept\Slope-Intercept\slopeintercept.cpp(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Dstoc\source\repos\Slope-Intercept\Slope-Intercept\slopeintercept.cpp(235,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Dstoc\source\repos\Slope-Intercept\Slope-Intercept\slopeintercept.cpp(236,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Dstoc\source\repos\Slope-Intercept\Slope-Intercept\slopeintercept.cpp(237,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Slope-Intercept.vcxproj -> C:\Users\Dstoc\source\repos\Slope-Intercept\Debug\Slope-Intercept.exe
