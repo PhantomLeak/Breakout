@@ -9,18 +9,18 @@
 #include <string> 
 #define _USE_MATH_DEFINES // enable M_PI
 #include <math.h> // math library for sqrt and power, atan2, M_PI
+#include <iomanip>
 
-#include "fgcugl.h" // fgcu OpenGL library
+#include "fgcugl.h"			// fgcu OpenGL library
 #include "slopeIntercept.h" // file header
+#include "point.h"			// holds the points to create the line
+#include "line.h"			// line
+
 
 // function prototypes (declaration)
 Mode getProblem();
 void get2Point(Line &line);
 void getPointSlope(Line &line);
-float slopeFrom2Point(Line line);
-float slopeIntercept(Line line, float slope);
-float lineLength(Line line);
-float lineAngle(Line line);
 void displayLine(Line line);
 void display2Pt(Line line);
 void displaySlopeIntercept(Line line);
@@ -30,8 +30,7 @@ void drawLine(Line line);
 int main()
 {
 	Mode mode{};
-	Line line{};
-	Point point{};
+	Line line;
 	do
 	{
 		mode = getProblem();
@@ -52,16 +51,16 @@ int main()
 		{
 			if (mode == TWO_POINT)
 			{
-				line.slope = slopeFrom2Point(line);
-				line.yIntercept = slopeIntercept(line, line.slope);
+				line.calcSlope();
+				line.calcYIntercept();
 			}
 			else if (mode == POINT_SLOPE)
 			{
-				line.yIntercept = slopeIntercept(line, line.slope);
-				line.point2.Y = line.yIntercept;
+				Point pointslopePoint = Point(0, line.calcYIntercept());
+				line.setPoint2(pointslopePoint);
 			}
-		line.length = lineLength(line);
-		line.angle = lineAngle(line);
+			line.calcLength();
+			line.calcAngle();
 		}
 
 		// Calls functions to display informatoin based on the user's choice
@@ -125,8 +124,12 @@ Mode getProblem()
 Point getPoint()
 {
 	Point point;
+	float x, y;
 	std::cout << "Enter X and Y coordinates seperated by spaces: " << std::endl;
-	std::cin >> point.X >> point.Y;
+	std::cin >> x >> y;
+
+	point.setPointX(x);
+	point.setPointY(y);
 
 	return point;
 } // end getPoint
@@ -143,10 +146,10 @@ Point getPoint()
 void get2Point(Line &line)
 {
 	std::cout << "Enter the first point" << std::endl;
-	line.point1 = getPoint();
+	line.setPoint1(getPoint());
 
 	std::cout << "Enter the second point" << std::endl;
-	line.point2 = getPoint();
+	line.setPoint2(getPoint());
 
 
 } // end get2Point
@@ -163,81 +166,17 @@ void get2Point(Line &line)
 */
 void getPointSlope(Line &line)
 {
+	float slope;
+
 	std::cout << "Enter a point for the line" << std::endl;
-	line.point1 = getPoint();
+	line.setPoint1(getPoint());
 
 	std::cout << "Enter the slope for the line" << std::endl;
-	std::cin >> line.slope;
+	std::cin >> slope;
+
+	line.setSlope(slope);
 
 } // end getPointSlope
-
-
-/**
-* Takes a line and returns the slope of hte line as a float 
-* Parameters:
-* line
-* 
-* Return:
-* Slope as a float 
-*/
-float slopeFrom2Point(Line line)
-{
-	line.slope = (line.point2.Y - line.point1.Y) / (line.point2.X - line.point1.X);
-
-	return line.slope;
-}
-
-
-/**
-* Takes a Point and slope parameter and returns the y-intercept as a float
-* Parameters:
-* Point 
-* slope
-*
-* Return:
-* y-intercept as float 
-*/
-float slopeIntercept(Line line, float slope)
-{
-	slope = line.point1.Y - (line.slope * line.point1.X);
-
-	return slope;
-}
-
-/**
-* Takes a Line and returns the distance between two points as a float.
-* Parameters:
-* Line
-*
-* Return:
-* distance as a float 
-*/
-float lineLength(Line line)
-{
-	float distance = sqrt(pow(line.point2.X - line.point1.X, 2) + pow(line.point2.Y - line.point1.Y, 2));
-
-	return distance;
-}
-
-
-/**
-* Takes a Line and returns the line’s angle from the top of the Y axis, 
-or zero degrees, as a float.
-* Parameters:
-* Line
-*
-* Return:
-* angle of Y axit as a float
-*/
-float lineAngle(Line line)
-{
-	float radius = std::atan2(line.point2.Y - line.point1.Y, line.point2.X - line.point1.X);
-	float angle = radius * 180.0 / M_PI;
-	float degrees = 90.0 - angle;
-	float cardnial = (degrees > 0.0 ? degrees : degrees + 360.0);
-
-	return cardnial;
-}
 
 
 /**
@@ -252,12 +191,12 @@ void displayLine(Line line)
 {
 	std::cout << "\n"
 		"Line: \n"
-		"Point-1: " << "(" << line.point1.X << "," << line.point1.Y << ")" <<  "\n"
-		"Point-2: " << "(" << line.point2.X << "," << line.point2.Y << ")" <<  "\n"
-		"Slope: " << line.slope << "\n"
-		"Y-Intercept: " << line.yIntercept << "\n"
-		"Length: " << line.length << "\n"
-		"Angle: " << line.angle << "\n" << std::endl;
+		"Point-1: " << "(" << line.getPoint1().pointX() << " , " << line.getPoint1().pointY() << ")" << "\n"
+		"Point-2: " << "(" << line.getPoint2().pointX() << " , " << line.getPoint2().pointY() << ")" << "\n"
+		"Slope: " <<std::setprecision(2) << std::fixed << line.calcSlope() << "\n"
+		"Y-Intercept: " << std::setprecision(1) << std::fixed<< line.calcYIntercept() << "\n"
+		"Length: " << line.calcLength() << "\n"
+		"Angle: " << line.calcAngle() << "\n" << std::endl;
 
 
 } // end displayLine
@@ -274,9 +213,9 @@ void displayLine(Line line)
 void display2Pt(Line line)
 {
 	std::cout << "Two-point form: " << "\n"
-		<< "(" << line.point2.Y << " - " << line.point1.Y << ")" << "\n"
+		<< "(" << line.getPoint2().pointY() << " - " << line.getPoint1().pointY() << ")" << "\n"
 		"m = ---------------------" << "\n"
-		<< "(" << line.point2.X << " - " << line.point1.X << ")" << "\n"
+		<< "(" << line.getPoint2().pointX() << " - " << line.getPoint1().pointX() << ")" << "\n"
 		<< std::endl;
 
 } // end display2Pt
@@ -293,7 +232,7 @@ void display2Pt(Line line)
 void displayPointSlope(Line line)
 {
 	std::cout << "Point-Slope Form: " << "\n"
-		<< "y - " << line.point1.Y << " = " << line.slope << "(x - " << line.point1.X << ")" << "\n" << std::endl;
+		<< "y - " << line.getPoint1().pointY() << " = " << line.getSlope() << "(x - " << line.getPoint1().pointX() << ")" << "\n" << std::endl;
 
 } // end displayPointSlope
 
@@ -310,8 +249,7 @@ void displaySlopeIntercept(Line line)
 {
 	std::cout << "\n"
 		"Slope-Intercept Form: " "\n"
-		"Y = " << line.slope << "x" " + " << line.yIntercept << "\n" << std::endl;
-
+		"Y = " << line.calcSlope() << "x" " + " << line.calcYIntercept() << "\n" << std::endl;
 } // end displayPointSlope
 
 
@@ -333,7 +271,7 @@ void drawLine(Line line)
 	{
 		fgcugl::drawLine(0, WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT / 2);
 		fgcugl::drawLine(WINDOW_WIDTH / 2, 0, WINDOW_WIDTH / 2, WINDOW_HEIGHT);
-		fgcugl::drawLine(line.point1.X + WINDOW_WIDTH / 2, line.point1.Y + WINDOW_HEIGHT / 2, line.point2.X + WINDOW_WIDTH / 2, line.point2.Y + WINDOW_HEIGHT / 2, 1.0F, LINE_COLOR);
+		fgcugl::drawLine(line.getPoint1().pointX() + WINDOW_WIDTH / 2, line.getPoint1().pointY() + WINDOW_HEIGHT / 2, line.getPoint2().pointX() + WINDOW_WIDTH / 2, line.getPoint2().pointY() + WINDOW_HEIGHT / 2, 1.0F, LINE_COLOR);
 		fgcugl::windowPaint();
 		fgcugl::getEvents();
 

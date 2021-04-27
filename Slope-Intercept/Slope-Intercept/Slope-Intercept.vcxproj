@@ -143,10 +143,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\OpenGL\fgcugl-main\fgcugl.cpp" />
+    <ClCompile Include="line.cpp" />
+    <ClCompile Include="point.cpp" />
     <ClCompile Include="slopeintercept.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\CPPLibraries\OpenGL\fgcugl-main\fgcugl.h" />
+    <ClInclude Include="line.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="slopeintercept.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

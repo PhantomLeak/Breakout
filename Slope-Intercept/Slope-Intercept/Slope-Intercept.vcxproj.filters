@@ -21,12 +21,24 @@
     <ClCompile Include="..\..\OpenGL\fgcugl-main\fgcugl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\CPPLibraries\OpenGL\fgcugl-main\fgcugl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="slopeintercept.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="line.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

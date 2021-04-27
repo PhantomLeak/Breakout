@@ -10,6 +10,7 @@
 #define SLOPE_INTERCEPT_H
 
 #include <string> // for window title
+#include "point.h" // temporary until Line cpp and h are done. 
 
 // Global Constants
 const int WINDOW_WIDTH = 1000;
@@ -22,24 +23,6 @@ enum Mode
 	TWO_POINT,
 	POINT_SLOPE,
 	EXIT
-};
-
-// Point structures
-struct Point
-{
-	float X;
-	float Y;
-};
-
-// Line scrutcures
-struct Line
-{
-	Point point1;
-	Point point2;
-	float slope;
-	float yIntercept;
-	float length;
-	float angle;
 };
 
 #endif //SLOPE_INTERCEPT_H
